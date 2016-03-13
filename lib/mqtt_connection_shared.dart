@@ -1,10 +1,9 @@
 part of mqtt_shared;
 
 abstract class VirtualMqttConnection {
-  
   Future connect();
   handleConnectError(e);
-  
+
   sendMessageToBroker(MqttMessage m, [bool debugMessage = false]) {
     m.encode();
 
@@ -19,4 +18,3 @@ abstract class VirtualMqttConnection {
   startListening(_processData, _handleDone, _handleError);
   close();
 }
-

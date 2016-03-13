@@ -7,12 +7,17 @@ part of mqtt_shared;
  * 
  */
 class MqttMessageSuback extends MqttMessageAssured {
-
   num messageID;
   int grantedQoS;
-  
-  MqttMessageSuback() : messageID = 0, grantedQoS = 0, super(SUBACK);
-  MqttMessageSuback.decode(List<int> data, [bool debugMessage = false]) : messageID = 0, grantedQoS = QOS_0, super.decode(data, debugMessage);
+
+  MqttMessageSuback()
+      : messageID = 0,
+        grantedQoS = 0,
+        super(SUBACK);
+  MqttMessageSuback.decode(List<int> data, [bool debugMessage = false])
+      : messageID = 0,
+        grantedQoS = QOS_0,
+        super.decode(data, debugMessage);
 
   /**
    * decodeVariableHeader
@@ -23,12 +28,12 @@ class MqttMessageSuback extends MqttMessageAssured {
    */
   num decodeVariableHeader(List<int> data) {
     assert(data.length == 3);
-    
+
     messageID = 256 * data[0] + data[1];
 
-    return 2;      
+    return 2;
   }
-  
+
   /**
    * decodePayload
    * Decode PUBACK payload
@@ -39,6 +44,5 @@ class MqttMessageSuback extends MqttMessageAssured {
   decodePayload(List<int> data) {
     grantedQoS = (data[0] & QOS_ALL);
     print("[Suback] Granted QOS level: $grantedQoS");
-  }  
-
+  }
 }

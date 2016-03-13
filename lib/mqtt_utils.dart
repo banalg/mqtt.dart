@@ -23,22 +23,23 @@ const int UNSUBACK = 11;
 const int PINGREQ = 12;
 const int PINGRESP = 13;
 const int DISCONNECT = 14;
-  
 
 /**
  * mqttConnackRC
  * CONNACK Return codes 
  */
 class MqttConnackRC {
-  static final RCs = [  "Connection Accepted",                              // 0
-                        "Connection Refused: unacceptable protocol version", // 1,
-                        "Connection Refused: identifier rejected",          // 2
-                        "Connection Refused: server unavailable",           // 3
-                        "Connection Refused: bad user name or password",    // 4
-                        "Connection Refused: not authorized"];              // 5
+  static final RCs = [
+    "Connection Accepted", // 0
+    "Connection Refused: unacceptable protocol version", // 1,
+    "Connection Refused: identifier rejected", // 2
+    "Connection Refused: server unavailable", // 3
+    "Connection Refused: bad user name or password", // 4
+    "Connection Refused: not authorized"
+  ]; // 5
 
   const MqttConnackRC();
-  
+
   static String decodeConnackRC(num RC) {
     String rcMsg = RCs[RC];
     return (rcMsg != null) ? rcMsg : "Connection return code unknown $RC";
@@ -57,4 +58,3 @@ const int QOS_ALL = 0x03;
 class MqttError {
   const MqttError();
 }
-

@@ -9,9 +9,12 @@ part of mqtt_shared;
 class MqttMessageUnsubscribe extends MqttMessage {
   String _topic;
   num _messageID;
-  
-  MqttMessageUnsubscribe.setOptions(String topic, num messageID) : this._topic = topic, this._messageID = messageID, super.setOptions(UNSUBSCRIBE, 4 + topic.length, QOS_1);
-  
+
+  MqttMessageUnsubscribe.setOptions(String topic, num messageID)
+      : this._topic = topic,
+        this._messageID = messageID,
+        super.setOptions(UNSUBSCRIBE, 4 + topic.length, QOS_1);
+
   /**
    * encodeVariableHeader
    * encode variable header for SUBSCRIBE message
@@ -23,7 +26,7 @@ class MqttMessageUnsubscribe extends MqttMessage {
     _buf.add(_messageID ~/ 256);
     _buf.add(_messageID % 256);
   }
-  
+
   /**
    * encodePayload
    * encode payload for SUBSCRIBE message
@@ -35,7 +38,7 @@ class MqttMessageUnsubscribe extends MqttMessage {
     // payload
     _buf.add(_topic.length ~/ 256);
     _buf.add(_topic.length % 256);
-    
-    _buf.addAll(UTF8.encode(_topic));    
+
+    _buf.addAll(UTF8.encode(_topic));
   }
 }

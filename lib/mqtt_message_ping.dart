@@ -7,7 +7,7 @@ part of mqtt_shared;
  * 
  */
 class MqttMessagePingReq extends MqttMessage {
-  MqttMessagePingReq() :super(PINGREQ);
+  MqttMessagePingReq() : super(PINGREQ);
 }
 
 /**
@@ -17,5 +17,5 @@ class MqttMessagePingReq extends MqttMessage {
  * 
  */
 class MqttMessagePingResp extends MqttMessage {
-  MqttMessagePingResp() :super(PINGRESP);
-} 
+  MqttMessagePingResp() : super(PINGRESP);
+}

@@ -9,10 +9,12 @@ part of mqtt_shared;
 class MqttMessageSubscribe extends MqttMessage {
   String _topic;
   num _messageID;
-  
-  MqttMessageSubscribe.setOptions(String topic, num messageID, int QoS) 
-              : this._topic = topic, this._messageID = messageID, super.setOptions(SUBSCRIBE, 7 + topic.length, QoS);
-  
+
+  MqttMessageSubscribe.setOptions(String topic, num messageID, int QoS)
+      : this._topic = topic,
+        this._messageID = messageID,
+        super.setOptions(SUBSCRIBE, 7 + topic.length, QoS);
+
   /**
    * encodeVariableHeader
    * encode variable header for SUBSCRIBE message
@@ -24,7 +26,7 @@ class MqttMessageSubscribe extends MqttMessage {
     _buf.add(_messageID ~/ 256);
     _buf.add(_messageID % 256);
   }
-  
+
   /**
    * encodePayload
    * encode payload for SUBSCRIBE message
@@ -37,12 +39,10 @@ class MqttMessageSubscribe extends MqttMessage {
     // payload
     _buf.add(_topic.length ~/ 256);
     _buf.add(_topic.length % 256);
-    
+
     _buf.addAll(UTF8.encode(_topic));
-    
+
     // QoS level
     _buf.add(QoS);
-
   }
 }
-

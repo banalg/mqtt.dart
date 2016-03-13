@@ -7,13 +7,12 @@ part of mqtt_shared;
  * 
  */
 class MqttMessageConnack extends MqttMessage {
-
   String connAckStatus = "unknown";
   num returnCode;
-  
-  MqttMessageConnack.decode(List<int> data, [bool debugMessage = false]) : super.decode(data, debugMessage);
 
-  
+  MqttMessageConnack.decode(List<int> data, [bool debugMessage = false])
+      : super.decode(data, debugMessage);
+
   /**
    * decodeVariableHeader
    * Decode CONNACK variable header
@@ -22,11 +21,10 @@ class MqttMessageConnack extends MqttMessage {
    */
   num decodeVariableHeader(List<int> data) {
     assert(data.length == 2);
-    
+
     returnCode = data[1];
-    
+
     connAckStatus = MqttConnackRC.decodeConnackRC(data[1]);
-    return 2;      
+    return 2;
   }
-  
 }

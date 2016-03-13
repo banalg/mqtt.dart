@@ -1,7 +1,5 @@
 part of mqtt_shared;
 
-
-
 /** 
  * mqttWill
  * Define mqttWill
@@ -11,10 +9,9 @@ class MqttWill {
   String payload;
   int qos;
   int retain;
-  
+
   MqttWill(this.topic, this.payload, this.qos, this.retain);
 }
-
 
 /**
  * mqttMessageConnect
@@ -28,12 +25,12 @@ class MqttMessageConnect extends MqttMessage {
   MqttWill _will = null;
   String _userName = null;
   String _password = null;
-  
-  MqttMessageConnect.setOptions(String clientID, int qos, bool cleanSession) 
-        : this._clientID = clientID,
-          this._cleanSession = (cleanSession ? 1 : 0),
-          super.setOptions(CONNECT, 16 + clientID.length, qos);
-    
+
+  MqttMessageConnect.setOptions(String clientID, int qos, bool cleanSession)
+      : this._clientID = clientID,
+        this._cleanSession = (cleanSession ? 1 : 0),
+        super.setOptions(CONNECT, 16 + clientID.length, qos);
+
   /**
    * setWill
    * Set will for the connection
@@ -42,11 +39,12 @@ class MqttMessageConnect extends MqttMessage {
   void setWill(MqttWill w) {
     if (w != null) {
       _will = w;
-      len += 4 + UTF8.encode(_will.topic).length + UTF8.encode(_will.payload).length;
+      len += 4 +
+          UTF8.encode(_will.topic).length +
+          UTF8.encode(_will.payload).length;
     }
   }
-  
-  
+
   /**
    * setUserName
    */
@@ -56,19 +54,19 @@ class MqttMessageConnect extends MqttMessage {
       len += 2 + UTF8.encode(_userName).length;
     }
   }
-  
+
   /**
    * setUserNameAndPassword
    */
-  void setUserNameAndPassword(String userName,String password) {
+  void setUserNameAndPassword(String userName, String password) {
     setUserName(_userName);
-   
+
     if (password != null) {
       _password = password;
       len += 2 + UTF8.encode(_password).length;
     }
   }
-  
+
   /**
    * buildVariableHeader for CONNECT message
    * 
@@ -95,36 +93,35 @@ class MqttMessageConnect extends MqttMessage {
    *     
    */
   encodeVariableHeader() {
+    _buf.add(0x00); // length MSB
+    _buf.add(0x06); // length LSB
 
-    _buf.add(0x00);     // length MSB
-    _buf.add(0x06);     // length LSB
-    
-    _buf.addAll(MQTT_VERSION_IDENTIFIER);   // protocol name
-    _buf.add(MQTT_VERSION);         // protocol version
-    
+    _buf.addAll(MQTT_VERSION_IDENTIFIER); // protocol name
+    _buf.add(MQTT_VERSION); // protocol version
+
     // CONNECT flag
-    int connectFlag = 0x00; 
-  
+    int connectFlag = 0x00;
+
     //clean flag
-    connectFlag |= (_cleanSession << 1);    
-  
+    connectFlag |= (_cleanSession << 1);
+
     // will flag
-    if (_will != null) {    
-      connectFlag |=  ( 0x04 |( _will.qos << 3) | (_will.retain << 5));
+    if (_will != null) {
+      connectFlag |= (0x04 | (_will.qos << 3) | (_will.retain << 5));
     }
-    
+
     // user /password flag
     int userFlag = (_userName != null) ? 1 : 0;
     int passwordFlag = (_password != null) ? 1 : 0;
-    connectFlag |= ( userFlag << 6) | ( passwordFlag <<7 ); 
-  
-    _buf.add(connectFlag);  
+    connectFlag |= (userFlag << 6) | (passwordFlag << 7);
+
+    _buf.add(connectFlag);
 
     //Keep alive Timer
     _buf.add(0x00);
-    _buf.add(KEEPALIVE);  //Keepalive for 30s
+    _buf.add(KEEPALIVE); //Keepalive for 30s
   }
-  
+
   /**
    * encodePayload
    * encode payload for CONNECT message. It consists of:
@@ -135,36 +132,33 @@ class MqttMessageConnect extends MqttMessage {
    *  - Password
    */
   encodePayload() {
-  
-    //num payloadLen = len - 14;    
-   
-    // client identifier  
+    //num payloadLen = len - 14;
+
+    // client identifier
     _buf.add(UTF8.encode(_clientID).length ~/ 256);
-    _buf.add(UTF8.encode(_clientID).length % 256);  
+    _buf.add(UTF8.encode(_clientID).length % 256);
     _buf.addAll(UTF8.encode(_clientID));
-    
+
     if (_will != null) {
       _buf.add(UTF8.encode(_will.topic).length ~/ 256);
-      _buf.add(UTF8.encode(_will.topic).length % 256);  
+      _buf.add(UTF8.encode(_will.topic).length % 256);
       _buf.addAll(UTF8.encode(_will.topic));
 
       _buf.add(UTF8.encode(_will.payload).length ~/ 256);
-      _buf.add(UTF8.encode(_will.payload).length % 256);  
-      _buf.addAll(UTF8.encode(_will.payload));      
+      _buf.add(UTF8.encode(_will.payload).length % 256);
+      _buf.addAll(UTF8.encode(_will.payload));
     }
-    
+
     if (_userName != null) {
       _buf.add(UTF8.encode(_userName).length ~/ 256);
-      _buf.add(UTF8.encode(_userName).length % 256);  
-      _buf.addAll(UTF8.encode(_userName));            
+      _buf.add(UTF8.encode(_userName).length % 256);
+      _buf.addAll(UTF8.encode(_userName));
     }
 
     if (_password != null) {
       _buf.add(UTF8.encode(_password).length ~/ 256);
-      _buf.add(UTF8.encode(_password).length % 256);  
-      _buf.addAll(UTF8.encode(_password));            
+      _buf.add(UTF8.encode(_password).length % 256);
+      _buf.addAll(UTF8.encode(_password));
     }
-
   }
-  
 }

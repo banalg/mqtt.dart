@@ -7,30 +7,34 @@ final num KEEPALIVE = 30;
  * This abstract class describes an mqttMessage
  * It will be extended for each specific mqtt message (CONNECT, PUBLISH ...)
  */
-abstract class MqttMessage {  
+abstract class MqttMessage {
   List<int> _buf;
   List<int> get buf => _buf;
-  
+
   int type;
   num len;
   int QoS;
   int DUP;
   int retain;
-  
+
   /**
    * default constructor
    */
-  MqttMessage(this.type, [this.len = 0]) : QoS = QOS_0, DUP = 0, retain = 0 {
+  MqttMessage(this.type, [this.len = 0])
+      : QoS = QOS_0,
+        DUP = 0,
+        retain = 0 {
     _buf = new List<int>();
   }
   /**
    * setOptions constructor
    * Set the message options 
    */
-  MqttMessage.setOptions(this.type, this.len, [this.QoS = 0, this.retain = 0]) : DUP = 0 {
+  MqttMessage.setOptions(this.type, this.len, [this.QoS = 0, this.retain = 0])
+      : DUP = 0 {
     _buf = new List<int>();
   }
-  
+
   /**
    * decode constructor
    * Decode data to initialize the mqtt message
@@ -46,7 +50,7 @@ abstract class MqttMessage {
     if (data.length > 2 + vhLen) {
       decodePayload(data.sublist(2 + vhLen));
     }
-    
+
     if (debugMessage) {
       print("<<< ${this.toString()}");
     }
@@ -55,21 +59,22 @@ abstract class MqttMessage {
   String toString() {
     String bufString = "";
     if (_buf != null) {
-      _buf.forEach( (b) => bufString = bufString + b.toString());
+      _buf.forEach((b) => bufString = bufString + b.toString());
     }
     return "Type(${type}) Len(${len}) QoS(${QoS}) DUP(${DUP}) retain(${retain}) <${bufString}>]";
   }
+
   /**
    * operator ==
    */
-  bool operator == (MqttMessage other) {
-    return ( type == other.type
-          && len == other.len
-          && QoS == other.QoS
-          && DUP == other.DUP
-          && retain == other.retain
-    );
+  bool operator ==(MqttMessage other) {
+    return (type == other.type &&
+        len == other.len &&
+        QoS == other.QoS &&
+        DUP == other.DUP &&
+        retain == other.retain);
   }
+
   /**
    * encode
    * encode a mqtt message
@@ -95,9 +100,9 @@ abstract class MqttMessage {
    * 
    * Byte 2 : Remaining length
    */
-  encodeFixedHeader() {    
-    _buf.add( ((type << 4) | (DUP << 3) | (QoS << 1) | retain) );   // byte 1
-    
+  encodeFixedHeader() {
+    _buf.add(((type << 4) | (DUP << 3) | (QoS << 1) | retain)); // byte 1
+
     // byte 2 - encode remaining length
     if (len > 2) {
       num remLen = len - 2;
@@ -105,29 +110,28 @@ abstract class MqttMessage {
       do {
         digit = remLen % 128;
         remLen = remLen ~/ 128;
-        if ( remLen > 0 ) {
+        if (remLen > 0) {
           digit = (digit | 0x80);
         }
-        _buf.add(digit);                                                  
+        _buf.add(digit);
       } while (remLen > 0);
-    }
-    else {
+    } else {
       _buf.add(0);
     }
   }
+
   /**
    * encodeVariableHeader
    * Message specific - to be defined in extended classes
    */
   encodeVariableHeader() {}
-  
+
   /**
    * encodePayload
    * Message specific (Optional) - to be defined in extended classes
    */
-  encodePayload() {}  
+  encodePayload() {}
 
-   
   /** 
    * decodeFixedHeader
    * Decode the 2 byte mqtt fixed header
@@ -142,20 +146,20 @@ abstract class MqttMessage {
   decodeFixedHeader(data) {
     type = data[0] >> 4;
     DUP = data[0] & 0x1000;
-    QoS = (data[0]>>1) & QOS_ALL;
+    QoS = (data[0] >> 1) & QOS_ALL;
     retain = data[0] & 0x01;
-    
+
     num pos = 1;
     int digit;
     num remLength = 0;
     num multiplier = 1;
-    
+
     // remaining length
     do {
       digit = data[pos++];
       remLength += ((digit & 127) * multiplier);
-      multiplier *= 128;  
-    } while ( (digit & 0x80) != 0);
+      multiplier *= 128;
+    } while ((digit & 0x80) != 0);
 
     len = remLength + 2;
   }
@@ -166,14 +170,13 @@ abstract class MqttMessage {
    *
    * Return the length of the variable header
    */
-  num decodeVariableHeader(List<int> data) { return 0; }
-  
+  num decodeVariableHeader(List<int> data) {
+    return 0;
+  }
+
   /**
    * decodePayload
    * Message specific (Optional) - to be defined in extended classes
    */
   decodePayload(List<int> data) {}
 }
-
-
-
