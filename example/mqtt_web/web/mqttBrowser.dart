@@ -10,7 +10,7 @@ class MqttBrowser {
   num _msgID = 0;
   
   void connectToBroker() {
-    InputElement brokerUrl = query("#txt-broker-url");
+    InputElement brokerUrl = querySelector("#txt-broker-url");
     print("connecting to ${brokerUrl.value}");
     MqttConnectionHtmlWebSocket mqttCnx = new MqttConnectionHtmlWebSocket.setOptions(brokerUrl.value);
     c = new MqttClient(mqttCnx,clientID: "browser", qos: QOS_1);
@@ -24,17 +24,17 @@ class MqttBrowser {
     
     if (c != null) { 
       c.disconnect();  
-      ButtonElement btnConnect = query("#btn-connect");
+      ButtonElement btnConnect = querySelector("#btn-connect");
       btnConnect.disabled = false;
       
-      ButtonElement btnDisconnect = query("#btn-disconnect");
+      ButtonElement btnDisconnect = querySelector("#btn-disconnect");
       btnDisconnect.disabled = true;
 
     }    
   }
   
   void subscribe() {
-    InputElement topic = query("#txt-subscribe-topic");
+    InputElement topic = querySelector("#txt-subscribe-topic");
     print("subscribing to ${topic.value}");
     if (c != null) {
       c.subscribe(topic.value, QOS_1, MqttBrowser.onSubscribeData)
@@ -42,7 +42,7 @@ class MqttBrowser {
     }
   }
   void unsubscribe() {
-    InputElement topic = query("#txt-subscribe-topic");
+    InputElement topic = querySelector("#txt-subscribe-topic");
     print("unsubscribing from ${topic.value}");
     if (c != null) {
       c.unsubscribe(topic.value, subID)
@@ -51,8 +51,8 @@ class MqttBrowser {
   }
   
   void publish() {
-    InputElement topic = query("#txt-publish-topic");
-    InputElement message = query("#txt-publish-msg");
+    InputElement topic = querySelector("#txt-publish-topic");
+    InputElement message = querySelector("#txt-publish-msg");
     print("publishing ${message.value} to to ${topic.value}");
     if (c != null) {
       c.publish(topic.value, message.value, _msgID++, QOS_1, false)
@@ -63,10 +63,10 @@ class MqttBrowser {
   static void onSubscribed(s) {     
     print("Subscription done - ID: ${s.messageID} - Qos: ${s.grantedQoS}");
     subID = s.messageID;
-    ButtonElement btnSubscribe = query("#btn-subscribe");
+    ButtonElement btnSubscribe = querySelector("#btn-subscribe");
     btnSubscribe.disabled = true;
     
-    ButtonElement btnUnsubscribe = query("#btn-unsubscribe");
+    ButtonElement btnUnsubscribe = querySelector("#btn-unsubscribe");
     btnUnsubscribe.disabled = false;
     
   }
@@ -78,26 +78,26 @@ class MqttBrowser {
   static void onUnsubscribed() { 
     print("Subscription cancelled");
     
-    ButtonElement btnSubscribe = query("#btn-subscribe");
+    ButtonElement btnSubscribe = querySelector("#btn-subscribe");
     btnSubscribe.disabled = false;
     
-    ButtonElement btnUnsubscribe = query("#btn-unsubscribe");
+    ButtonElement btnUnsubscribe = querySelector("#btn-unsubscribe");
     btnUnsubscribe.disabled = true;
     
   }
   
   static void onConnected() {
     print("Connected !");
-    ButtonElement btnConnect = query("#btn-connect");
+    ButtonElement btnConnect = querySelector("#btn-connect");
     btnConnect.disabled = true;
     
-    ButtonElement btnDisconnect = query("#btn-disconnect");
+    ButtonElement btnDisconnect = querySelector("#btn-disconnect");
     btnDisconnect.disabled = false;
     
-    ButtonElement btnSubscribe = query("#btn-subscribe");
+    ButtonElement btnSubscribe = querySelector("#btn-subscribe");
     btnSubscribe.disabled = false;
     
-    ButtonElement btnPublish = query("#btn-publish");
+    ButtonElement btnPublish = querySelector("#btn-publish");
     btnPublish.disabled = false;
 
   }
@@ -110,7 +110,7 @@ class MqttBrowser {
     StringBuffer msg = new StringBuffer();
     msg.writeAll(["[", topic, "] : ", data]);
     
-    DivElement itemContainer = query("#subMsgs");
+    DivElement itemContainer = querySelector("#subMsgs");
     
     DivElement subMsgElement = new Element.tag("div");
     subMsgElement.classes.add("subMsg");

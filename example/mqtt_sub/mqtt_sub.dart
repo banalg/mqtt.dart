@@ -54,7 +54,7 @@ class MqttSubOptions {
     
     void _help(bool value) {
       if(value) {
-        print(parser.getUsage());
+        print(parser.usage);
         exit(0);
       }
     }  
@@ -168,7 +168,7 @@ main(List<String> args) {
   }
   // connect to broker
   c.connect(onConnectionLost)
-    .then( (c)=> subscribe(c, mqttOptions)) 
+    .then( (s)=> subscribe(c, mqttOptions))
     .catchError((e) => print("Error: $e"), test: (e) => e is SocketException)  
     .catchError((mqttErr) {
       print("Error: $mqttErr");

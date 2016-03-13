@@ -13,6 +13,9 @@ packages
 *.js.map
 
 # Include when developing application packages.
-#pubspec.lock
+pubspec.lock
 
 # Created by .ignore support plugin (hsz.mobi)
+
+#IntellijIdea
+.idea/

@@ -6,3 +6,4 @@ homepage: https://github.com/jnguillerme/mqtt.dart
 dependencies:
   ini: '>=1.0.0'
   unittest: '>=0.11.0'
+  test: any

@@ -58,7 +58,7 @@ class MqttPubOptions {
     
     void _help(bool value) {
       if(value) { 
-        print(parser.getUsage());
+        print(parser.usage);
         exit(0);
       }
     }  
@@ -196,7 +196,7 @@ main(List<String> args) {
   }
   // connect to broker
   c.connect(onConnectionLost)
-    .then( (c)=> publish(c, mqttOptions)) 
+    .then( (s)=> publish(c, mqttOptions))
     .catchError((e) => print("Error: $e"), test: (e) => e is SocketException)  
     .catchError((mqttErr) {
       print("Error: $mqttErr");

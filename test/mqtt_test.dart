@@ -1,5 +1,5 @@
-import 'package:unittest/unittest.dart';
 import 'package:unittest/vm_config.dart';
+import 'package:test/test.dart';
 
 import '../lib/mqtt_shared.dart';
 

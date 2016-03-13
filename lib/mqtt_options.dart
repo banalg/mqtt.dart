@@ -27,7 +27,7 @@ class MqttOptions {
 
   MqttOptions.initFromConfig(String configFile)  {    
     File cfgFile = new File(configFile);
-    _config = Config.readFileSync(cfgFile);
+    _config = new Config.fromStrings(cfgFile.readAsLinesSync());
 
     optionList.forEach((k,v) =>  processOptionsForSection(k, v) );
   }

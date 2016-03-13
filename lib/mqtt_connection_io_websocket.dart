@@ -9,6 +9,7 @@ class MqttConnectionIOWebSocket extends VirtualMqttConnection{
   WebSocket _ws;
   
   MqttConnectionIOWebSocket.setOptions(this._url);
+
   Future connect() {
     print("[WebSocket] Connecting to $_url");
     return WebSocket.connect(_url);
