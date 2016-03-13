@@ -10,9 +10,9 @@ class MqttConnectionIOWebSocket extends VirtualMqttConnection {
 
   MqttConnectionIOWebSocket.setOptions(this._url);
 
-  Future connect() {
+  Future connect({Iterable<String> protocols}) {
     print("[WebSocket] Connecting to $_url");
-    return WebSocket.connect(_url);
+    return WebSocket.connect(_url, protocols:protocols);
   }
 
   handleConnectError(e) {

@@ -11,11 +11,11 @@ class MqttConnectionHtmlWebSocket extends VirtualMqttConnection {
 
   MqttConnectionHtmlWebSocket.setOptions(this._url);
 
-  Future connect() {
+  Future connect({Iterable<String> protocols}) {
     print("[HTML WebSocket] Connecting to $_url");
 
     Completer connected = new Completer();
-    _ws = new WebSocket(_url);
+    _ws = new WebSocket(_url, protocols);
     _ws.binaryType = "arraybuffer";
     _ws.onOpen.listen((e) {
       connected.complete(_ws);

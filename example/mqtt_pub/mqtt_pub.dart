@@ -32,11 +32,11 @@ import 'package:args/args.dart';
  */
 
 class MqttPubOptions {
-  bool debugMessage = false;
+  bool debugMessage = true;
   String host = '127.0.0.1';
   num port = 1883;
   String url = null;
-  String clientID = "mqtt_dart_pub";
+  String clientID = "fsihvlks7453dfdsr";
   num messageID = 0;
   String topic;
   String payload;
@@ -102,10 +102,16 @@ class MqttPubOptions {
         callback: (id) => messageID = int.parse(id));
 
     parser.addOption('topic',
-        abbr: 't', help: 'Topic', callback: (t) => topic = t);
+        defaultsTo: 'hellotopic',
+        abbr: 't',
+        help: 'Topic',
+        callback: (t) => topic = t);
 
     parser.addOption('message',
-        abbr: 'm', help: 'Message', callback: (m) => payload = m);
+        defaultsTo: 'messagetopic',
+        abbr: 'm',
+        help: 'Message',
+        callback: (m) => payload = m);
 
     parser.addOption('qos',
         abbr: 'q',
@@ -151,7 +157,7 @@ class MqttPubOptions {
   }
 }
 
-main(List<String> args) {
+main(List<String> args) async {
   print("starting");
 
   MqttPubOptions mqttOptions = new MqttPubOptions();
@@ -170,6 +176,8 @@ main(List<String> args) {
     mqttCnx = new MqttConnectionIOSocket.setOptions(
         host: mqttOptions.host, port: mqttOptions.port);
   } else {
+    mqttOptions.host = 'test.mosquitto.org';
+    mqttOptions.port = 8080;
     // websocket connection
     mqttCnx = new MqttConnectionIOWebSocket.setOptions(mqttOptions.url);
   }
@@ -180,20 +188,21 @@ main(List<String> args) {
 
   // set additional options
   c.debugMessage = mqttOptions.debugMessage;
+  c.debugMessage = true;
 
   if (mqttOptions.willTopic != null) {
     c.setWill(mqttOptions.willTopic, mqttOptions.willPayload,
         qos: mqttOptions.willQoS, retain: mqttOptions.willRetain);
   }
-  // connect to broker
-  c
-      .connect(onConnectionLost)
-      .then((s) => publish(c, mqttOptions))
+  // connect to broker protocols:['mqttv3.1']
+  await c
+      .connect(onConnectionLostCallback:onConnectionLost, protocols:['mqttv3.1'])
       .catchError((e) => print("Error: $e"), test: (e) => e is SocketException)
       .catchError((mqttErr) {
     print("Error: $mqttErr");
     exit(-1);
   });
+  publish(c, mqttOptions);
 }
 
 void publish(MqttClient c, MqttPubOptions mqttOptions) {

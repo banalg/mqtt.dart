@@ -12,7 +12,7 @@ class MqttConnectionIOSocket extends VirtualMqttConnection {
   MqttConnectionIOSocket.setOptions({String host: "127.0.0.1", num port: 1883})
       : _host = host,
         _port = port;
-  Future connect() {
+  Future connect({Iterable<String> protocols}) {
     return Socket.connect(_host, _port);
   }
 
