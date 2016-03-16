@@ -196,12 +196,13 @@ main(List<String> args) async {
   }
   // connect to broker protocols:['mqttv3.1']
   await c
-      .connect(onConnectionLostCallback:onConnectionLost, protocols:['mqttv3.1'])
+      .connect(
+          onConnectionLostCallback: onConnectionLost)
       .catchError((e) => print("Error: $e"), test: (e) => e is SocketException)
       .catchError((mqttErr) {
-    print("Error: $mqttErr");
-    exit(-1);
-  });
+        print("Error: $mqttErr");
+        exit(-1);
+      });
   publish(c, mqttOptions);
 }
 
