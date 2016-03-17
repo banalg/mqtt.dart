@@ -12,6 +12,7 @@ class MqttConnectionIOWebSocket extends VirtualMqttConnection {
 
   Future connect({Iterable<String> protocols, Map<String, dynamic> headers, CompressionOptions compression}) {
     print("[WebSocket] Connecting to $_url");
+    return WebSocket.connect(_url, protocols:protocols, headers:headers);
     return WebSocket.connect(_url, protocols:protocols, headers:headers, compression:compression == null ? CompressionOptions.DEFAULT:compression);
   }
 
