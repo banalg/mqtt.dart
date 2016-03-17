@@ -176,8 +176,6 @@ main(List<String> args) async {
     mqttCnx = new MqttConnectionIOSocket.setOptions(
         host: mqttOptions.host, port: mqttOptions.port);
   } else {
-    mqttOptions.host = 'test.mosquitto.org';
-    mqttOptions.port = 8080;
     // websocket connection
     mqttCnx = new MqttConnectionIOWebSocket.setOptions(mqttOptions.url);
   }
@@ -197,7 +195,7 @@ main(List<String> args) async {
   // connect to broker protocols:['mqttv3.1']
   await c
       .connect(
-          onConnectionLostCallback: onConnectionLost)
+          onConnectionLostCallback: onConnectionLost, protocols: ['mqttv3.1'])
       .catchError((e) => print("Error: $e"), test: (e) => e is SocketException)
       .catchError((mqttErr) {
         print("Error: $mqttErr");
