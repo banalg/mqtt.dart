@@ -65,7 +65,7 @@ class MqttClient<E extends VirtualMqttConnection> {
     var socket = await _mqttConnection.connect(protocols:protocols, headers:headers);
     _handleConnected(socket);
 
-    //return _connack.future;
+    return _connack.future;
   }
 
   /**
@@ -224,6 +224,7 @@ class MqttClient<E extends VirtualMqttConnection> {
     * Return the data that has not been processed
     */
   List<int> _processMqttMessage(data) {
+    print(data);
     num type = data[0] >> 4;
     int msgProcessedLength = data.length;
 
