@@ -56,13 +56,17 @@ class MqttClient<E extends VirtualMqttConnection> {
    * An optional callback can be provided to be called when 
    * the connection to the mqtt broker has been lost
   */
-  Future<Null> connect({Function onConnectionLostCallback, Iterable<String> protocols, Map<String, dynamic> headers}) async {
+  Future<Null> connect(
+      {Function onConnectionLostCallback,
+      Iterable<String> protocols,
+      Map<String, dynamic> headers}) async {
     _connack = new Completer();
 
     if (onConnectionLostCallback != null)
       onConnectionLost = onConnectionLostCallback;
 
-    var socket = await _mqttConnection.connect(protocols:protocols, headers:headers);
+    var socket =
+        await _mqttConnection.connect(protocols: protocols, headers: headers);
     _handleConnected(socket);
 
     return _connack.future;
@@ -101,7 +105,7 @@ class MqttClient<E extends VirtualMqttConnection> {
 
   /**
    * unsubscribe
-   * 
+   *
    */
   Future<MqttMessageUnsuback> unsubscribe(String topic, num messageID) {
     print("Unsubscribe from $topic ($messageID)");
@@ -116,7 +120,7 @@ class MqttClient<E extends VirtualMqttConnection> {
   }
 
   /**
-   * publish 
+   * publish
    * publish message with payload to topic with qosLevel
    */
   Future<MqttMessagePuback> publish(String topic, String payload,
@@ -177,7 +181,7 @@ class MqttClient<E extends VirtualMqttConnection> {
 
   /**
    * _handleConnected
-   * This method is called when the connection with the mqtt broker 
+   * This method is called when the connection with the mqtt broker
    * has been established
    * It will start listening to messages from the broker and
    * open the mqtt session
@@ -205,12 +209,14 @@ class MqttClient<E extends VirtualMqttConnection> {
 
   /**
     * processData
-    * This method is called everytime we receive some data 
+    * This method is called everytime we receive some data
     * from the mqtt broker
     */
 
   void _processData(data) {
     var remData = data;
+    //Todo : find why in WebSocketHtml data is ByteBuffer, and in WebSocketIo data is Uint8List
+    if (data.runtimeType == ByteBuffer) remData = new Uint8List.view(data);
 
     do {
       remData = _processMqttMessage(remData);
@@ -224,7 +230,6 @@ class MqttClient<E extends VirtualMqttConnection> {
     * Return the data that has not been processed
     */
   List<int> _processMqttMessage(data) {
-    print(data);
     num type = data[0] >> 4;
     int msgProcessedLength = data.length;
 

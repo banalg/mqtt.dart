@@ -4,6 +4,7 @@ import 'dart:async';
 import 'mqtt_version_v3.dart';
 import "package:ini/ini.dart";
 //import 'dart:io';
+import 'dart:typed_data';
 import 'dart:convert';
 
 part 'package:mqtt/src/mqtt_client.dart';
