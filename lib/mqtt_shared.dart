@@ -3,7 +3,7 @@ library mqtt_shared;
 import 'dart:async';
 import 'mqtt_version_v3.dart';
 import "package:ini/ini.dart";
-import 'dart:io';
+//import 'dart:io';
 import 'dart:convert';
 
 part 'mqtt_client.dart';

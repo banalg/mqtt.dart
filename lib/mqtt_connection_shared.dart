@@ -1,7 +1,7 @@
 part of mqtt_shared;
 
 abstract class VirtualMqttConnection {
-  Future connect({Iterable<String> protocols, Map<String, dynamic> headers, CompressionOptions compression});
+  Future connect({Iterable<String> protocols, Map<String, dynamic> headers});
   handleConnectError(e);
 
   sendMessageToBroker(MqttMessage m, [bool debugMessage = false]) {

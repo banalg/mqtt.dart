@@ -15,7 +15,7 @@ class MqttBrowser {
     c = new MqttClient(mqttCnx, clientID: "browser", qos: QOS_1);
 
     c
-        .connect(MqttBrowser.onConnectionLost)
+        .connect(onConnectionLostCallback:onConnectionLost)
         .then((c) => MqttBrowser.onConnected());
   }
 

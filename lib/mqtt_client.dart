@@ -56,13 +56,13 @@ class MqttClient<E extends VirtualMqttConnection> {
    * An optional callback can be provided to be called when 
    * the connection to the mqtt broker has been lost
   */
-  Future<Null> connect({Function onConnectionLostCallback, Iterable<String> protocols, Map<String, dynamic> headers, CompressionOptions compression}) async {
+  Future<Null> connect({Function onConnectionLostCallback, Iterable<String> protocols, Map<String, dynamic> headers}) async {
     _connack = new Completer();
 
     if (onConnectionLostCallback != null)
       onConnectionLost = onConnectionLostCallback;
 
-    var socket = await _mqttConnection.connect(protocols:protocols, headers:headers, compression:compression);
+    var socket = await _mqttConnection.connect(protocols:protocols, headers:headers);
     _handleConnected(socket);
 
     //return _connack.future;
