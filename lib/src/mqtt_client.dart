@@ -215,11 +215,15 @@ class MqttClient<E extends VirtualMqttConnection> {
 
   void _processData(data) {
     var remData;
-    //Todo : find why in WebSocketHtml data is ByteBuffer, and in WebSocketIo data is Uint8List
-    if (data.runtimeType is Uint8List){
+    ///Todo : find why in WebSocketHtml data is ByteBuffer, and in WebSocketIo data is Uint8List
+    ///need uniformization in files mqtt_connection_[io_websocket || html_websocket || io_socket].dart
+    if (data.runtimeType is Uint8List) {
       remData = data;
-    } else {
+    } else if(data.runtimeType is ByteBuffer){
       remData = new Uint8List.view(data);
+    } else {
+      remData = data;
+      //_Uint8ArrayView
     }
 
     do {
