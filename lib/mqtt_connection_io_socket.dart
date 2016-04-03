@@ -12,7 +12,7 @@ class MqttConnectionIOSocket extends VirtualMqttConnection {
   MqttConnectionIOSocket.setOptions({String host: "127.0.0.1", num port: 1883})
       : _host = host,
         _port = port;
-  Future connect({Iterable<String> protocols}) {
+  Future connect({Iterable<String> protocols, Map<String, dynamic> headers, CompressionOptions compression}) {
     return Socket.connect(_host, _port);
   }
 
@@ -29,7 +29,7 @@ class MqttConnectionIOSocket extends VirtualMqttConnection {
     _socket = cnx;
   }
 
-  startListening(_processData, _handleDone, _handleError) {
+  startListening(_processData(Uint8List), _handleDone, _handleError) {
     //ToDo uniform here _processData with io_websocket and html_websocket
     _socket.listen((data) => _processData(data),
         onDone: () => _handleDone(), onError: (e) => _handleError(e));

@@ -213,18 +213,19 @@ class MqttClient<E extends VirtualMqttConnection> {
     * from the mqtt broker
     */
 
-  void _processData(data) {
+  void _processData(Uint8List data) {
     var remData;
     ///Todo : find why in WebSocketHtml data is ByteBuffer, and in WebSocketIo data is Uint8List
     ///need uniformization in files mqtt_connection_[io_websocket || html_websocket || io_socket].dart
-    if (data.runtimeType is Uint8List) {
+    /*if (data.runtimeType is Uint8List) {
       remData = data;
     } else if(data.runtimeType is ByteBuffer){
       remData = new Uint8List.view(data);
     } else {
       remData = data;
       //_Uint8ArrayView
-    }
+    }*/
+    remData = data;
 
     do {
       remData = _processMqttMessage(remData);
@@ -237,7 +238,7 @@ class MqttClient<E extends VirtualMqttConnection> {
     * 
     * Return the data that has not been processed
     */
-  List<int> _processMqttMessage(data) {
+  List<int> _processMqttMessage(Uint8List data) {
     num type = data[0] >> 4;
     int msgProcessedLength = data.length;
 

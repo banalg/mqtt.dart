@@ -15,6 +15,6 @@ abstract class VirtualMqttConnection {
 
   privateSendMessageToBroker(m);
   setConnection(cnx);
-  startListening(_processData, _handleDone, _handleError);
+  startListening(_processData(Uint8List), _handleDone, _handleError);
   close();
 }

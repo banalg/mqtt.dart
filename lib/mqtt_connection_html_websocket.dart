@@ -37,10 +37,14 @@ class MqttConnectionHtmlWebSocket extends VirtualMqttConnection {
     //_ws = cnx;
   }
 
-  startListening(_processData, _handleDone, _handleError) {
+  startListening(_processData(Uint8List), _handleDone, _handleError) {
     _ws.onClose.listen((e) => _handleDone());
     //ToDo uniform here _processData with io_websocket and io_socket
-    _ws.onMessage.listen((MessageEvent e) => _processData(e.data));
+    _ws.onMessage.listen((MessageEvent e){
+      ByteBuffer buf = e.data;
+      Uint8List u = buf.asUint8List();
+      _processData(u);
+    });
     _ws.onError.listen((e) => _handleError(e));
   }
 
