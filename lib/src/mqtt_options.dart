@@ -33,10 +33,8 @@ class MqttOptions {
   int willQoS = QOS_0;
   bool willRetain = false;
 
-  MqttOptions.initFromConfig(String configFile) {
-    File cfgFile = new File(configFile);
-    _config = new Config.fromStrings(cfgFile.readAsLinesSync());
-
+  MqttOptions.initFromStrings(List<String> configStrings) {
+    _config = new Config.fromStrings(configStrings);
     optionList.forEach((k, v) => processOptionsForSection(k, v));
   }
 
